@@ -1,4 +1,4 @@
-from fastapi import FastAPI #Importa la clase FastAPI de la biblioteca fastapi
+from fastapi import FastAPI , Body #Importa la clase FastAPI de la biblioteca fastapi
 from fastapi.responses import HTMLResponse #Importa la clase HTMLResponse de la biblioteca fastapi.responses
 from movies_lis import movies_list
 
@@ -20,3 +20,22 @@ def get_movie(id:int):
         if item['id'] == id:
             return item
     return {}
+
+@app.get('/movies/',tags=['Movies']) #Definiendo una ruta de la clase FastAPI
+def get_movies_by_category(category:str):
+    for item in movies_list:
+        if item['category'] == category:
+            return item
+    return {}
+
+@app.post('/movies/', tags=['Movies']) #Definiendo una ruta de la clase FastAPI
+def create_movie(id:int = Body(), title:str = Body(), overview:str = Body(), year:int = Body(), rating:float = Body(), category:str = Body()):
+    movies_list.append({
+        "id": id,
+        "title": title,
+        "overview": overview,
+        "year": year,
+        "rating": rating,
+        "category": category
+    })
+    return movies_list
